@@ -33,7 +33,7 @@ int main(int argc, char** argv) {
   //Create player
   float x = (float)SCREEN_WIDTH / 2, y = (float)SCREEN_HEIGHT / 2;
   int width = 15, height = 15;
-  Player player = Player(renderer, worldPtr, (int)x, (int)y, width, height, { 255, 0, 0, 255 }, 60, 1.5);
+  Player player = Player(renderer, worldPtr, (int)x, (int)y, width, height, { 255, 0, 0, 255 }, 60, 1.5, 32);
 
 
   //Time variables for delta time
