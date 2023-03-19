@@ -2,6 +2,7 @@
 #include <stdio.h>
 
 #include "player.hpp"
+#include "world.hpp"
 
 #define SCREEN_WIDTH 1280 
 #define SCREEN_HEIGHT 720
@@ -25,6 +26,11 @@ int main(int argc, char** argv) {
     printf("Error: Failed to create renderer\nSDL Error: '%s'\n", SDL_GetError());
     return 1;
   }
+
+  //Create world
+  World world = World(renderer);
+  std::cout << "World created" << std::endl;
+  std::cout << "Map size: " << world.mapX << "x" << world.mapY << std::endl;
 
   //Create player
   float x = (float)SCREEN_WIDTH / 2, y = (float)SCREEN_HEIGHT / 2;
@@ -63,6 +69,7 @@ int main(int argc, char** argv) {
     //Move the player according to the keyboard input
     player.move(deltaTime);
 
+    world.draw(); //Draw world
     player.draw(); //Draw player
 
     SDL_RenderPresent(renderer);
