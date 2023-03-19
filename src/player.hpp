@@ -46,7 +46,6 @@ public:
       x += speed;
     }
 
-    std::cout << "x: " << x << " y: " << y << std::endl;
   }
 
   void updateKeys(SDL_Keycode key, bool pressed) {
