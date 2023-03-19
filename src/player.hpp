@@ -37,9 +37,6 @@ public:
 
     //These values are arbitrary, they just feel right 
     float linearSpead = 0.3f * (float)deltaTime;
-    float angularSpead = 3.0f * (float)deltaTime;
-
-
 
     if (keys.w) {
       y -= linearSpead;
