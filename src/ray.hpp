@@ -1,9 +1,11 @@
 class Ray {
 public:
-  float x, y, angle;
-  Ray(float x, float y, float angle) {
-    this->x = x;
-    this->y = y;
+  float hx, hy, vx, vy, angle;
+  Ray(float hx, float hy, float vx, float vy, float angle) {
+    this->hx = hx;
+    this->hy = hy;
+    this->vx = vx;
+    this->vy = vy;
     this->angle = angle;
-  }
+  };
 };
