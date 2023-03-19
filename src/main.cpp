@@ -3,8 +3,8 @@
 
 #include "player.hpp"
 
-#define SCREEN_WIDTH 1280 
-#define SCREEN_HEIGHT 640
+#define SCREEN_WIDTH 1024
+#define SCREEN_HEIGHT 512
 
 int main(int argc, char** argv) {
   //Initialize SDL
@@ -33,7 +33,8 @@ int main(int argc, char** argv) {
   //Create player
   float x = (float)SCREEN_WIDTH / 2, y = (float)SCREEN_HEIGHT / 2;
   int width = 15, height = 15;
-  Player player = Player(renderer, worldPtr, (int)x, (int)y, width, height, { 255, 0, 0, 255 });
+  Player player = Player(renderer, worldPtr, (int)x, (int)y, width, height, { 255, 0, 0, 255 }, 60, 1.5);
+
 
   //Time variables for delta time
   Uint32 lastTime = 0, currentTime = 0;
