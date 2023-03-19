@@ -1,6 +1,10 @@
 #include <SDL2/SDL.h>
 #include <iostream>
 #include <math.h>
+#include <vector>
+
+#include "world.hpp"
+#include "ray.hpp"
 
 #define PI 3.1415926535
 
@@ -8,47 +12,104 @@ struct Keys {
   bool w, a, s, d;
 };
 
+struct Coord {
+  float x, y;
+};
+
 class Player {
 public:
   SDL_Color color;
-  SDL_Renderer* renderer;
+  SDL_Renderer* renderer; //Renderer pointer from the main file
+  World* world; //World pointer from the main file
   float x, y; //Position
   int width, height; //Size
-  Keys keys; //Keyboard input
+  Keys keys = { false, false, false, false }; //Keyboard input
   float theta = 0; //Rotation
+  float dx = 0, dy = 0; //Delta x and y
+  std::vector<Ray> rays;
+  float fov;
 
-  Player(SDL_Renderer* renderer, float x, float y, int w, int h, SDL_Color color) {
+  Player(SDL_Renderer* renderer, World* world, float x, float y, int w, int h, SDL_Color color, int numRays, float fov, int height) {
     this->renderer = renderer;
+    this->world = world;
     this->color = color;
     this->x = x;
     this->y = y;
     this->width = w;
     this->height = h;
-    this->keys = { false, false, false, false };
+    this->fov = fov;
+    for (int i = 0; i < numRays; i++) {
+      rays.push_back(Ray(x, y, theta));
+    }
   }
+
+  void castRays(float fov) {
+    float offset = (this->fov) / 2; float startingPoint = this->theta - offset; float endingPoint = this->theta + offset;
+    float range = endingPoint - startingPoint; float step = range / this->rays.size();
+    for (float i = startingPoint; i < endingPoint; i += step) {
+      float x2 = cos(i) * 20;
+      float y2 = sin(i) * 20;
+      SDL_RenderDrawLine(renderer, (int)x + width / 2, (int)y + height / 2, (int)x + width / 2 + x2 * 32, (int)y + height / 2 + y2 * 32);
+
+    }
+  }
+
+  Coord getPositionInMap(float x, float y) {
+    Coord position;
+    position.x = (x / 64);
+    position.y = (y / 64);
+    return position;
+  }
+
+  void checkHorizontalCast(float theta, float x, float y) {
+    if (theta > PI) {
+
+    }
+  }
+
+  void checkVerticalCast(float theta, float x, float y) {
+    //TODO
+
+  }
+
 
   void draw() {
     SDL_SetRenderDrawColor(renderer, color.r, color.g, color.b, color.a);
     SDL_Rect rect = { (int)x, (int)y, width, height };
     SDL_RenderFillRect(renderer, &rect);
+    castRays(this->fov);
   }
 
   void move(Uint32 deltaTime) {
 
     //These values are arbitrary, they just feel right 
-    float linearSpead = 0.3f * (float)deltaTime;
+    float linearSpeed = 0.07f * (float)deltaTime;
+    float angularSpeed = 0.004f * (float)deltaTime;
 
+    //This is all just basic trigonometry
     if (keys.w) {
-      y -= linearSpead;
+      x += dx * linearSpeed;
+      y += dy * linearSpeed;
     }
     if (keys.s) {
-      y += linearSpead;
-    }
-    if (keys.a) {
-      x -= linearSpead;
+      x -= dx * linearSpeed;
+      y -= dy * linearSpeed;
     }
     if (keys.d) {
-      x += linearSpead;
+      theta += angularSpeed;
+      if (theta > 2 * PI) {
+        theta -= 2 * PI;
+      }
+      dx = cos(theta) * 5;
+      dy = sin(theta) * 5;
+    }
+    if (keys.a) {
+      theta -= angularSpeed;
+      if (theta < 0) {
+        theta += 2 * PI;
+      }
+      dx = cos(theta) * 5;
+      dy = sin(theta) * 5;
     }
 
   }
