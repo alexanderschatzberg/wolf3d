@@ -1,5 +1,8 @@
 #include <SDL2/SDL.h>
 #include <iostream>
+#include <math.h>
+
+#define PI 3.1415926535
 
 struct Keys {
   bool w, a, s, d;
@@ -12,6 +15,7 @@ public:
   float x, y; //Position
   int width, height; //Size
   Keys keys; //Keyboard input
+  float theta = 0; //Rotation
 
   Player(SDL_Renderer* renderer, float x, float y, int w, int h, SDL_Color color) {
     this->renderer = renderer;
@@ -31,19 +35,23 @@ public:
 
   void move(Uint32 deltaTime) {
 
-    float speed = 0.6f * (float)deltaTime;
+    //These values are arbitrary, they just feel right 
+    float linearSpead = 0.3f * (float)deltaTime;
+    float angularSpead = 3.0f * (float)deltaTime;
+
+
 
     if (keys.w) {
-      y -= speed;
+      y -= linearSpead;
     }
     if (keys.s) {
-      y += speed;
+      y += linearSpead;
     }
     if (keys.a) {
-      x -= speed;
+      x -= linearSpead;
     }
     if (keys.d) {
-      x += speed;
+      x += linearSpead;
     }
 
   }
