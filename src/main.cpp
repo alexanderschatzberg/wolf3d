@@ -5,7 +5,7 @@
 #include "world.hpp"
 
 #define SCREEN_WIDTH 1280 
-#define SCREEN_HEIGHT 720
+#define SCREEN_HEIGHT 640
 
 int main(int argc, char** argv) {
   //Initialize SDL
@@ -29,8 +29,6 @@ int main(int argc, char** argv) {
 
   //Create world
   World world = World(renderer);
-  std::cout << "World created" << std::endl;
-  std::cout << "Map size: " << world.mapX << "x" << world.mapY << std::endl;
 
   //Create player
   float x = (float)SCREEN_WIDTH / 2, y = (float)SCREEN_HEIGHT / 2;
