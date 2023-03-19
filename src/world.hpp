@@ -22,11 +22,15 @@ public:
   }
 
   void draw() {
-    SDL_SetRenderDrawColor(renderer, 56, 64, 128, 255);
-
     for (int i = 0; i < 8; i++) {
       for (int j = 0; j < 8; j++) {
+        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 255);
         if (map[j][i] == 1) { //They are flipped because of the way the map is stored
+          SDL_Rect rect = { i * 64, j * 64, 64, 64 };
+          SDL_RenderDrawRect(renderer, &rect);
+        }
+        else {
+          SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
           SDL_Rect rect = { i * 64, j * 64, 64, 64 };
           SDL_RenderDrawRect(renderer, &rect);
         }
