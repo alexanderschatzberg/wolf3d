@@ -39,18 +39,31 @@ public:
     this->height = h;
     this->fov = fov;
     for (int i = 0; i < numRays; i++) {
-      rays.push_back(Ray(x, y, theta));
+      rays.push_back(Ray(renderer, 0, 0, theta));
     }
   }
 
   void castRays(float fov) {
     float offset = (this->fov) / 2; float startingPoint = this->theta - offset; float endingPoint = this->theta + offset;
     float range = endingPoint - startingPoint; float step = range / this->rays.size();
-    for (float i = startingPoint; i < endingPoint; i += step) {
-      float x2 = cos(i) * 20;
-      float y2 = sin(i) * 20;
-      SDL_RenderDrawLine(renderer, (int)x + width / 2, (int)y + height / 2, (int)x + width / 2 + x2 * 32, (int)y + height / 2 + y2 * 32);
+    for (float i = 0; i < this->rays.size(); i++) {
+      Coord horizontalCast = checkHorizontalCast(startingPoint + (i * step), this->x, this->y);
+      Coord verticalCast = checkVerticalCast(startingPoint + (i * step), this->x, this->y);
 
+      float horizontalDistance = sqrt(pow(horizontalCast.x - this->x, 2) + pow(horizontalCast.y - this->y, 2));
+      float verticalDistance = sqrt(pow(verticalCast.x - this->x, 2) + pow(verticalCast.y - this->y, 2));
+
+      if (horizontalDistance < verticalDistance) {
+        this->rays[i].x = horizontalCast.x;
+        this->rays[i].y = horizontalCast.y;
+      }
+      else {
+        this->rays[i].x = verticalCast.x;
+        this->rays[i].y = verticalCast.y;
+      }
+
+      this->rays[i].theta = startingPoint + (i * step);
+      this->rays[i].draw(this.x, this->y);
     }
   }
 
@@ -61,13 +74,13 @@ public:
     return position;
   }
 
-  void checkHorizontalCast(float theta, float x, float y) {
+  Coord checkHorizontalCast(float theta, float x, float y) {
     if (theta > PI) {
-
+      Coord playerGridPos = getPositionInMap(x, y);
     }
   }
 
-  void checkVerticalCast(float theta, float x, float y) {
+  Coord checkVerticalCast(float theta, float x, float y) {
     //TODO
 
   }
